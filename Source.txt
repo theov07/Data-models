@@ -1,0 +1,19 @@
+Subset of the Spotify dataset
+For pedagogical purpose only
+https://www.kaggle.com/datasets/yamaerenay/spotify-dataset-19212020-600k-tracks
+
+The genre column were corrected to respect JSON format.
+For the notice we used the following query to transform it.
+SELECT id,followers,
+	'["'|| -- add [" to the start
+	replace(
+	replace(
+	replace(
+	trim(genres,'[]''"') -- remove [ ] ' and " from the begining and end of the string
+	,''', ''','", "') -- replace ', ' by ", "
+	,''', "','", "'), -- replace ', " by ", " (there is some mixed syntax X_x)
+	'", ''','", "') -- replace ", ' by ", " (there is some mixed syntax X_x)
+	||'"]'  -- add "] to the end
+	AS genres,
+	name, popularity
+    FROM Artists;
